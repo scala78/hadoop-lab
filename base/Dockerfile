@@ -60,7 +60,7 @@ RUN set -x \
 
 RUN ln -s /opt/${SPARK_BINARY}/etc/hadoop /etc/spark
 RUN mkdir /opt/${SPARK_BINARY}/logs
-RUN ln -s /opt/spark /opt/${SPARK_BINARY}
+RUN ln -s /opt/${SPARK_BINARY} /opt/spark
 
 
 ENV SPARK_HOME=/opt/spark
@@ -68,12 +68,18 @@ ENV SPARK_CONF_DIR=/etc/spark
 
 ENV USER=root
 ENV PATH $SPARK_HOME/bin/:$PATH
+ENV LD_LIBRARY_PATH $HADOOP_HOME/lib/native:$LD_LIBRARY_PATH
 
 COPY  configs/* ${HADOOP_CONF_DIR}/
 COPY  configs/spark-defaults.conf ${SPARK_CONF_DIR}/
 ADD entrypoint.sh /entrypoint.sh
 
 RUN chmod a+x /entrypoint.sh
+
+RUN addgroup --gid 1000 hadoop \
+    && adduser --gid 1000 --uid 1000 --disabled-password -q hadoop \
+    && usermod -aG sudo hadoop \
+    && echo 'hadoop:hadoop' | chpasswd
 
 
 ENTRYPOINT ["/entrypoint.sh"]
