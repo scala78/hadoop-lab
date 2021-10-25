@@ -4,19 +4,19 @@
 ## *Components*
 + Deployment using Docker compose
 + Services
-    + HDFS
+    + HDFS (3.2.2)
         + [+] Name Node
         + [+] Data Node
-    + YARN
+    + YARN (3.2.2)
         + [+] Resource Manager
-        + [+] Node Manager (2 or more) &amp
+        + [+] Node Manager (2 or more)
         + [+] History Service
-    + SPARK
+    + SPARK (3.1.2, Scala 2.12)
         + [+] SPARK History Service
         + [-] SPARK Shuffle Service on Yarn
     + HUE
         + [-] HUE service
-    + LIVY
+    + LIVY (0.7.1)
         + [+] Livy Service, not fully tested 
     + Edge Node 
         + [+] SSH Service
@@ -36,7 +36,7 @@
 ### Connectivity
    + Port *9922*, protocol *SSH*
    + User *hadoop*, password *hadoop*
-   
+
 ### Test spark submit
    `spark-submit --deploy-mode client --class org.apache.spark.examples.SparkPi $SPARK_HOME/examples/jars/spark-examples_2.12-3.1.2.jar 10`
 ### Test hadoop
