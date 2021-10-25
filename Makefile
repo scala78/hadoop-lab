@@ -12,12 +12,14 @@ build:
 	docker build -t scala78/hadoop-historyserver:$(current_branch) ./historyserver
 	docker build -t scala78/hadoop-edgenode:$(current_branch) ./edgenode
 	docker build -t scala78/hadoop-sparkhistoryserver:$(current_branch) ./sparkhistoryserver
+	docker build -t scala78/hadoop-livynode:$(current_branch) ./livynode
 	#docker build -t scala78/hadoop-submit:$(current_branch) ./submit
 
 run:
 	docker-compose up
 
-clear:
+clean:
+	docker rmi -f scala78/hadoop-livynode:$(current_branch)
 	docker rmi -f scala78/hadoop-sparkhistoryserver:$(current_branch)
 	docker rmi -f scala78/hadoop-edgenode:$(current_branch)
 	docker rmi -f scala78/hadoop-historyserver:$(current_branch)

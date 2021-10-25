@@ -7,6 +7,6 @@ cp /.profile /home/hadoop/
 
 service ssh restart
 
-sleep 10000h
+while true; do sleep 10m ; echo "infinite loop"; done
 
 

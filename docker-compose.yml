@@ -108,6 +108,14 @@ services:
     environment:
       SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode:9864 resourcemanager:8088"
 
+  livynode:
+    image: scala78/hadoop-livynode:master
+    container_name: livynode
+    hostname: livynode
+    restart: always
+    environment:
+      SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode:9864 resourcemanager:8088"
+
 volumes:
   hadoop_namenode:
   hadoop_datanode:
