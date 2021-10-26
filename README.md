@@ -16,7 +16,7 @@
         + [-] SPARK Shuffle Service on Yarn
     + HUE
         + [-] HUE service
-    + LIVY (0.7.1)
+    + LIVY (0.8.0-SNAPSHOT, Spark 3.0, Scala 2.12)
         + [+] Livy Service, not fully tested 
     + Edge Node 
         + [+] SSH Service

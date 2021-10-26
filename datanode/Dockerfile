@@ -1,4 +1,5 @@
-FROM scala78/hadoop-base:master
+ARG VERSION=latest
+FROM scala78/hadoop-base:${VERSION}
 
 LABEL org.opencontainers.image.authors="Dmitrii V<dsv@scala78.ru>" 
 

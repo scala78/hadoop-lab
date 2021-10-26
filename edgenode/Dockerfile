@@ -1,13 +1,11 @@
-FROM scala78/hadoop-base:master
+ARG VERSION=latest
+FROM scala78/hadoop-base:${VERSION}
 
 LABEL org.opencontainers.image.authors="Dmitrii V<dsv@scala78.ru>" 
 
-ENV home_dir=/home
-RUN mkdir -p ${home_dir}
-VOLUME ${home_dir}
-
-RUN mkdir -p /home/hadoop \
-    && chown -R hadoop:hadoop /home/hadoop
+ENV HOME_DIR /home
+RUN mkdir -p ${HOME_DIR}
+VOLUME ${HOME_DIR}
 
 ADD configs/.bashrc .profile
 

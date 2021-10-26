@@ -12,7 +12,11 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-ins
       ssh \
       openssh-server \
       unzip \
-    && rm -rf /var/lib/apt/lists/*
+      python3 \
+      git \
+      python3-setuptools \
+    && rm -rf /var/lib/apt/lists/* \
+    && ln -s /usr/bin/python3 /usr/bin/python
       
 ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
 

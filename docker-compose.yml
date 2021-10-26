@@ -2,7 +2,7 @@ version: "3"
 
 services:
   namenode:
-    image: scala78/hadoop-namenode:master
+    image: scala78/hadoop-namenode:${VERSION}
     container_name: namenode
     hostname: namenode
     restart: always
@@ -17,7 +17,7 @@ services:
       - ./hadoop.env   
   
   datanode:
-    image: scala78/hadoop-datanode:master
+    image: scala78/hadoop-datanode:${VERSION}
     container_name: datanode
     hostname: datanode
     restart: always
@@ -31,7 +31,7 @@ services:
       - ./hadoop.env
 
   resourcemanager:
-    image: scala78/hadoop-resourcemanager:master
+    image: scala78/hadoop-resourcemanager:${VERSION}
     container_name: resourcemanager
     hostname: resourcemanager
     restart: always
@@ -43,7 +43,7 @@ services:
       - ./hadoop.env
 
   nodemanager01:
-    image: scala78/hadoop-nodemanager:master
+    image: scala78/hadoop-nodemanager:${VERSION}
     container_name: nodemanager01
     hostname: nodemanager01
     restart: always
@@ -55,7 +55,7 @@ services:
       - ./hadoop.env
 
   nodemanager02:
-    image: scala78/hadoop-nodemanager:master
+    image: scala78/hadoop-nodemanager:${VERSION}
     container_name: nodemanager02
     hostname: nodemanager02
     restart: always
@@ -67,7 +67,7 @@ services:
       - ./hadoop.env
 
   historyserver:
-    image: scala78/hadoop-historyserver:master
+    image: scala78/hadoop-historyserver:${VERSION}
     container_name: historyserver
     hostname: historyserver
     restart: always
@@ -91,7 +91,7 @@ services:
       - hadoop_proxy:/var/log
   
   edgenode:
-    image: scala78/hadoop-edgenode:master
+    image: scala78/hadoop-edgenode:${VERSION}
     container_name: edgenode
     restart: always
     hostname: edgenode
@@ -101,7 +101,7 @@ services:
       - hadoop_edgenode:/home
       
   sparkhistoryserver:
-    image: scala78/hadoop-sparkhistoryserver:master
+    image: scala78/hadoop-sparkhistoryserver:${VERSION}
     container_name: sparkhistoryserver
     hostname: sparkhistoryserver
     restart: always
@@ -109,12 +109,14 @@ services:
       SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode:9864 resourcemanager:8088"
 
   livynode:
-    image: scala78/hadoop-livynode:master
+    image: scala78/hadoop-livynode:${VERSION}
     container_name: livynode
     hostname: livynode
     restart: always
     environment:
       SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode:9864 resourcemanager:8088"
+    ports:
+      - "8998:8998"
 
 volumes:
   hadoop_namenode:
