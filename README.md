@@ -4,14 +4,14 @@
 ## *Components*
 + Deployment using Docker compose
 + Services
-    + HDFS (3.2.2)
+    + HDFS (3.3.1)
         + [+] Name Node
         + [+] Data Node
-    + YARN (3.2.2)
+    + YARN (3.2.1)
         + [+] Resource Manager
         + [+] Node Manager (2 or more)
         + [+] History Service
-    + SPARK (3.1.2, Scala 2.12)
+    + SPARK (3.2.0, Scala 2.12)
         + [+] SPARK History Service
         + [-] SPARK Shuffle Service on Yarn
     + HUE

@@ -29,7 +29,7 @@ RUN chmod 600 /root/.ssh/config
 RUN curl -O https://dist.apache.org/repos/dist/release/hadoop/common/KEYS \ 
 && gpg --import KEYS
 
-ENV HADOOP_VERSION 3.2.2
+ARG HADOOP_VERSION 3.3.1
 ENV HADOOP_URL https://www.apache.org/dist/hadoop/common/hadoop-$HADOOP_VERSION/hadoop-$HADOOP_VERSION.tar.gz
 
 RUN set -x \
@@ -50,8 +50,9 @@ ENV USER=root
 ENV PATH $HADOOP_HOME/bin/:$PATH
 
 RUN ln -s /opt/hadoop-$HADOOP_VERSION/etc/hadoop /etc/hadoop
-ENV SPARK_VERSION 3.1.2
-ENV SPARK_BINARY spark-${SPARK_VERSION}-bin-hadoop3.2
+ARG SPARK_VERSION 3.2.0
+ARG SPARK_HADOOP_VERSION 3.2
+ENV SPARK_BINARY spark-${SPARK_VERSION}-bin-hadoop${SPARK_HADOOP_VERSION}
 ENV SPARK_URL https://dlcdn.apache.org/spark/spark-${SPARK_VERSION}/${SPARK_BINARY}.tgz
 RUN curl -O https://dist.apache.org/repos/dist/release/spark/KEYS \ 
 && gpg --import KEYS
