@@ -1,8 +1,9 @@
 DOCKER_NETWORK = docker-hadoop_default
 ENV_FILE = hadoop.env
 HADOOP_VERSION := 3.3.1
-SPARK_VERSION := 3.2.0
+SPARK_VERSION := 3.1.2
 SPARK_HADOOP_VERSION := 3.2
+CONFIGS := ./configs
 
 current_branch := $(shell git rev-parse --abbrev-ref HEAD)
 #current_branch := master
@@ -19,6 +20,8 @@ build:
 	docker build -t scala78/hadoop-livynode:$(current_branch) --build-arg VERSION=$(current_branch) ./livynode
 	#docker build -t scala78/hadoop-submit:$(current_branch) --build-arg VERSION=$(current_branch) ./submit
 	echo VERSION=$(current_branch) >.env
+	echo CONFIGS=$(CONFIGS) >>.env
+
 run:
 	docker-compose up
 

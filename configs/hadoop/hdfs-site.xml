@@ -33,8 +33,4 @@
         <name>dfs.namenode.name.dir</name>
         <value>file:///hadoop/dfs/name</value>
     </property>
-    <property>
-        <name>dfs.webhdfs.enabled</name>
-        <value>true</value>
-    </property>
 </configuration>

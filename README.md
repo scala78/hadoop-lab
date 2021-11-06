@@ -7,15 +7,15 @@
     + HDFS (3.3.1)
         + [+] Name Node
         + [+] Data Node
-    + YARN (3.2.1)
+    + YARN (3.3.1)
         + [+] Resource Manager
         + [+] Node Manager (2 or more)
         + [+] History Service
-    + SPARK (3.2.0, Scala 2.12)
+    + SPARK (3.1.2, Scala 2.12)
         + [+] SPARK History Service
         + [-] SPARK Shuffle Service on Yarn
     + HUE
-        + [-] HUE service
+        + [+] HUE service
     + LIVY (0.8.0-SNAPSHOT, Spark 3.0, Scala 2.12)
         + [+] Livy Service, not fully tested 
     + Edge Node 
@@ -23,6 +23,9 @@
         + [+] Spark submit
     + Proxy Http/Https Node 
         + [+] Squid proxy
++ Configuration
+     the configurations are located according to the CONFIG variable, by default this is the directory `./configs`
+
 
 ## *Usage*
 ### Build Docker image
@@ -54,5 +57,6 @@
  + [historyserver](http://historyserver:8188)
  + [sparkhistoryserver](http://sparkhistoryserver:18080)
  + [livynode](http://livynode:8998)
+ + [huenode](http://huenode:8888) or docker node port 38888
 
 *[This project is based on the developments of the big-data-europe project](https://github.com/big-data-europe/docker-hadoop)*

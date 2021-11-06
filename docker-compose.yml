@@ -1,4 +1,12 @@
-version: "3"
+version: "3.4"
+x-hadoop-lab-common:
+  &hadoop-lab-volumes
+  volumes:
+    - ${CONFIGS}/hadoop/core-site.xml:/etc/hadoop/core-site.xml
+    - ${CONFIGS}/hadoop/hdfs-site.xml:/etc/hadoop/hdfs-site.xml
+    - ${CONFIGS}/hadoop/mapred-site.xml:/etc/hadoop/mapred-site.xml
+    - ${CONFIGS}/hadoop/yarn-site.xml:/etc/hadoop/yarn-site.xml
+    - ${CONFIGS}/spark/spark-defaults.xml:/etc//spark/spark-defaults.xml
 
 services:
   namenode:
@@ -6,11 +14,13 @@ services:
     container_name: namenode
     hostname: namenode
     restart: always
-    # ports:
-    #   - 9870:9870
-    #   - 9000:9000
     volumes:
-      - hadoop_namenode:/hadoop/dfs/name
+        - ${CONFIGS}/hadoop/core-site.xml:/etc/hadoop/core-site.xml
+        - ${CONFIGS}/hadoop/hdfs-site.xml:/etc/hadoop/hdfs-site.xml
+        - ${CONFIGS}/hadoop/mapred-site.xml:/etc/hadoop/mapred-site.xml
+        - ${CONFIGS}/hadoop/yarn-site.xml:/etc/hadoop/yarn-site.xml
+        - ${CONFIGS}/spark/spark-defaults.xml:/etc//spark/spark-defaults.xml
+        - hadoop_namenode:/hadoop/dfs/name
     environment:
       - CLUSTER_NAME=lab
     env_file:
@@ -21,10 +31,13 @@ services:
     container_name: datanode
     hostname: datanode
     restart: always
-    # ports: 
-    #   - 9864:9864
     volumes:
       - hadoop_datanode:/hadoop/dfs/data
+      - ${CONFIGS}/hadoop/core-site.xml:/etc/hadoop/core-site.xml
+      - ${CONFIGS}/hadoop/hdfs-site.xml:/etc/hadoop/hdfs-site.xml
+      - ${CONFIGS}/hadoop/mapred-site.xml:/etc/hadoop/mapred-site.xml
+      - ${CONFIGS}/hadoop/yarn-site.xml:/etc/hadoop/yarn-site.xml
+      - ${CONFIGS}/spark/spark-defaults.xml:/etc//spark/spark-defaults.xml
     environment:
       SERVICE_PRECONDITION: "namenode:9870"
     env_file:
@@ -35,8 +48,7 @@ services:
     container_name: resourcemanager
     hostname: resourcemanager
     restart: always
-    # ports:
-    #   - 8088:8088
+    <<: *hadoop-lab-volumes
     environment:
       SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode:9864"
     env_file:
@@ -47,8 +59,7 @@ services:
     container_name: nodemanager01
     hostname: nodemanager01
     restart: always
-    # ports:
-    #   - 8042:8042
+    <<: *hadoop-lab-volumes
     environment:
       SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode:9864 resourcemanager:8088"
     env_file:
@@ -59,8 +70,7 @@ services:
     container_name: nodemanager02
     hostname: nodemanager02
     restart: always
-    # ports:
-    #   - 8242:8042
+    <<: *hadoop-lab-volumes
     environment:
       SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode:9864 resourcemanager:8088"
     env_file:
@@ -71,12 +81,15 @@ services:
     container_name: historyserver
     hostname: historyserver
     restart: always
-    # ports:
-    #   - 8188:8188
     environment:
       SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode:9864 resourcemanager:8088"
     volumes:
       - hadoop_historyserver:/hadoop/yarn/timeline
+      - ${CONFIGS}/hadoop/core-site.xml:/etc/hadoop/core-site.xml
+      - ${CONFIGS}/hadoop/hdfs-site.xml:/etc/hadoop/hdfs-site.xml
+      - ${CONFIGS}/hadoop/mapred-site.xml:/etc/hadoop/mapred-site.xml
+      - ${CONFIGS}/hadoop/yarn-site.xml:/etc/hadoop/yarn-site.xml
+      - ${CONFIGS}/spark/spark-defaults.xml:/etc//spark/spark-defaults.xml
     env_file:
       - ./hadoop.env  
 
@@ -98,6 +111,11 @@ services:
     ports:
       - "9922:22"
     volumes:
+      - ${CONFIGS}/hadoop/core-site.xml:/etc/hadoop/core-site.xml
+      - ${CONFIGS}/hadoop/hdfs-site.xml:/etc/hadoop/hdfs-site.xml
+      - ${CONFIGS}/hadoop/mapred-site.xml:/etc/hadoop/mapred-site.xml
+      - ${CONFIGS}/hadoop/yarn-site.xml:/etc/hadoop/yarn-site.xml
+      - ${CONFIGS}/spark/spark-defaults.xml:/etc//spark/spark-defaults.xml
       - hadoop_edgenode:/home
       
   sparkhistoryserver:
@@ -105,6 +123,7 @@ services:
     container_name: sparkhistoryserver
     hostname: sparkhistoryserver
     restart: always
+    <<: *hadoop-lab-volumes
     environment:
       SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode:9864 resourcemanager:8088"
 
@@ -113,10 +132,37 @@ services:
     container_name: livynode
     hostname: livynode
     restart: always
+    <<: *hadoop-lab-volumes
     environment:
       SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode:9864 resourcemanager:8088"
     ports:
       - "8998:8998"
+
+  huenode:
+      image: gethue/hue:latest
+      container_name: huenode
+      hostname: huenode
+      restart: always
+      depends_on:
+        - "mysqlnode"
+      volumes:
+        - ${CONFIGS}/hue/hue.ini:/usr/share/hue/desktop/conf/z-hue.ini
+      ports:
+        - "38888:8888"
+  mysqlnode:
+      image: mysql:5.7
+      ports:
+        - "33061:3306"
+      container_name: mysqlnode
+      hostname: mysqlnode
+      command: --init-file /data/application/init.sql
+      volumes:
+        - data-mysql:/var/lib/mysql
+        - ${CONFIGS}/hue/init.sql:/data/application/init.sql
+      environment:
+        MYSQL_ROOT_USER: root
+        MYSQL_ROOT_PASSWORD: secret
+        MYSQL_DATABASE: hue
 
 volumes:
   hadoop_namenode:
@@ -124,3 +170,4 @@ volumes:
   hadoop_historyserver:
   hadoop_edgenode:
   hadoop_proxy:
+  data-mysql:

@@ -20,16 +20,16 @@ ENV PATH /opt/apache-maven-3.8.3/bin:${PATH}
 
 ENV LIVY_HOME /opt/livy
 ENV LIVY_CONF_DIR ${LIVY_HOME}/conf
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-      python3-cloudpickle \
-      python3-requests \
-      python3-requests-kerberos \
-      python3-flake8 \
-      python3-flaky \
-      python3-pytest \
-      python3-pytest-runner\
-    && rm -rf /var/lib/apt/lists/*
+# RUN apt-get update \
+#     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+#       python3-cloudpickle \
+#       python3-requests \
+#       python3-requests-kerberos \
+#       python3-flake8 \
+#       python3-flaky \
+#       python3-pytest \
+#       python3-pytest-runner\
+#     && rm -rf /var/lib/apt/lists/*
 
 RUN cd /tmp \
     && git clone https://github.com/apache/incubator-livy.git \

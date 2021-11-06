@@ -7,7 +7,7 @@ ENV HOME_DIR /home
 RUN mkdir -p ${HOME_DIR}
 VOLUME ${HOME_DIR}
 
-ADD configs/.bashrc .profile
+ADD configs/profile .profile
 
 ADD run.sh /run.sh
 RUN chmod a+x /run.sh

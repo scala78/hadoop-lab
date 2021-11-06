@@ -3,20 +3,43 @@ FROM debian:9
 LABEL org.opencontainers.image.authors="Dmitrii V<dsv@scala78.ru>" 
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-      openjdk-8-jdk \
-      net-tools \
-      curl \
-      netcat \
-      gnupg \
-      libsnappy-dev \
-      ssh \
-      openssh-server \
-      unzip \
-      python3 \
-      git \
-      python3-setuptools \
-    && rm -rf /var/lib/apt/lists/* \
-    && ln -s /usr/bin/python3 /usr/bin/python
+    openjdk-8-jdk \
+    net-tools \
+    curl \
+    netcat \
+    gnupg \
+    libsnappy-dev \
+    ssh \
+    openssh-server \
+    unzip \
+    git \
+    build-essential \
+    zlib1g-dev \
+    libncurses5-dev \
+    libgdbm-dev \
+    libnss3-dev \
+    libssl-dev \
+    libreadline-dev \
+    libffi-dev \
+    wget \
+    krb5-multidev \
+    && rm -rf /var/lib/apt/lists/*
+
+ENV PYTHON_VERSION=3.8.12
+RUN set -x \
+    && cd /tmp \
+    && curl -O https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tar.xz \
+    && tar xf Python-${PYTHON_VERSION}.tar.xz \
+    && cd Python-${PYTHON_VERSION} \
+    && ./configure --enable-optimizations \
+    && make \
+    && make install \
+#    && rm /usr/bin/python /usr/bin/python3 \
+    && ln -s /usr/local/bin/python3 /usr/bin/python \
+    && ln -s /usr/local/bin/python3 /usr/bin/python3 \
+    && /usr/local/bin/python3.8 -m pip install --upgrade pip \
+    && pip3 install "cloudpickle >= 0.5.3" requests requests-kerberos "flake8  >= 3.8.0" "flaky >= 3.7.0" "pytest >= 5.4.2" "pytest-runner >= 5.2.0" "packaging >= 20.9" "pyparsing == 2.4.6" "six == 1.16.0"\
+    && rm -rf /tmp/Python*
       
 ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
 
